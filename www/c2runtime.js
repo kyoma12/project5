@@ -18753,12 +18753,14 @@ cr.getObjectRefTable = function () { return [
 	cr.plugins_.Sprite,
 	cr.plugins_.SpriteFontPlus,
 	cr.behaviors.Flash,
+	cr.system_object.prototype.cnds.OnLayoutStart,
+	cr.system_object.prototype.acts.Wait,
+	cr.system_object.prototype.acts.GoToLayout,
 	cr.plugins_.Touch.prototype.cnds.OnTouchObject,
 	cr.plugins_.cranberrygame_CordovaDialog.prototype.acts.Prompt,
 	cr.plugins_.cranberrygame_CordovaDialog.prototype.cnds.OnPromptOkClicked,
 	cr.plugins_.SpriteFontPlus.prototype.acts.SetText,
 	cr.plugins_.cranberrygame_CordovaDialog.prototype.exps.PromptInput,
 	cr.plugins_.SpriteFontPlus.prototype.cnds.CompareText,
-	cr.system_object.prototype.acts.GoToLayout,
 	cr.plugins_.cranberrygame_CordovaDialog.prototype.acts.Alert
 ];};
