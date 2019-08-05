@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
-<widget id="bnmp.6" version="1.0.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-	<name>Project 6</name>
-	<description>aaaa</description>
-	<author>aaaa</author>
+<widget id="com.bpmp.project9" version="1.0.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+	<name>Project 9</name>
+	<description>project 9 </description>
+	<author email="multidukasi@gmail.com">ahlimedia</author>
 
 	<icon src="www/icon-256.png" width="256" height="256" density="xxxhdpi" />
 	<icon src="www/icon-128.png" width="128" height="128" density="xhdpi" />
