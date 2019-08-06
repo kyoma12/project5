@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
-<widget id="com.bnmp.project6" version="1.0.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-	<name>Project 6</name>
-	<description>project6</description>
+<widget id="com.bpmp.Project13" version="1.0.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+	<name>Project 13</name>
+	<description>project13</description>
 	<author email="multidukasi@gmail.com">ahlimedia</author>
 
 	<icon src="www/icon-256.png" width="256" height="256" density="xxxhdpi" />
@@ -9,7 +9,7 @@
 
 	<preference name="android-targetSdkVersion" value="28" />
 
-	<preference name="orientation" value="landscape" />
+	<preference name="orientation" value="default" />
 	<preference name="fullscreen" value="true" />
 	<preference name="DisallowOverscroll" value="true" />
 	<preference name="AllowInlineMediaPlayback" value="true" />

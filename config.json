@@ -1,14 +1,14 @@
 ﻿{
-	"id": "com.bnmp.project6",
+	"id": "com.bpmp.Project13",
 	"version": "1.0.0.0",
-	"name": "Project 6",
-	"description": "project6",
+	"name": "Project 13",
+	"description": "project13",
 	"author": "ahlimedia",
 	"email": "multidukasi@gmail.com",
 	"website": "",
 	"fullscreen": "true",
 	"useragent": null,
-	"orientation": "landscape",
+	"orientation": "default",
 	"icons": [{
 		"src": "www/icon-256.png",
 		"width": 256,
