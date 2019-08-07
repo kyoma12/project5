@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
-<widget id="com.bpmp.project14" version="1.0.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-	<name>Project 14</name>
-	<description>project14</description>
+<widget id="com.bpmp.project12" version="1.0.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+	<name>Project 12</name>
+	<description>project12</description>
 	<author email="multidukasi@gmail.com">ahlimedia</author>
 
 	<icon src="www/icon-256.png" width="256" height="256" density="xxxhdpi" />
