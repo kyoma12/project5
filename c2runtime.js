@@ -15535,6 +15535,69 @@ cr.plugins_.AJAX = function(runtime)
 	};
 	pluginProto.exps = new Exps();
 }());
+/**
+ * Object holder for the plugin
+ */
+cr.plugins_.ATPShare = function(runtime) {
+    this.runtime = runtime;
+};
+/**
+ * C2 plugin
+ */
+(function() {
+    var pluginProto = cr.plugins_.ATPShare.prototype;
+    pluginProto.Type = function(plugin) {
+        this.plugin = plugin;
+        this.runtime = plugin.runtime;
+    };
+    var typeProto = pluginProto.Type.prototype;
+    typeProto.onCreate = function() {};
+    /**
+     * C2 specific behaviour
+     */
+    pluginProto.Instance = function(type) {
+        this.type = type;
+        this.runtime = type.runtime;
+    };
+    var instanceProto = pluginProto.Instance.prototype;
+    var self;
+    instanceProto.onCreate = function() {
+        if (!(this.runtime.isAndroid || this.runtime.isiOS))
+            return;
+        if (typeof Cocoon == 'undefined')
+            return;
+        self = this;
+    };
+    function Cnds() {};
+    Cnds.prototype.onShareComplete = function() {
+        return true;
+    };
+    Cnds.prototype.onShareFail = function() {
+        return true;
+    }
+    pluginProto.cnds = new Cnds();
+    /**
+     * Plugin actions
+     */
+    function Acts() {};
+    Acts.prototype.Share = function(text, img) {
+        if (!window.Cocoon || !window.Cocoon.Share) {
+            return;
+        }
+        Cocoon.Share.share({
+            message: text,
+            image: img
+        }, function(activity, completed, error){
+            if (completed) {
+                self.runtime.trigger(cr.plugins_.ATPShare.prototype.cnds.onShareComplete, self);
+            } else {
+                self.runtime.trigger(cr.plugins_.ATPShare.prototype.cnds.onShareFail, self);
+                console.log(error);
+            }
+        });
+    };
+    pluginProto.acts = new Acts();
+}());
 ;
 ;
 cr.plugins_.Arr = function(runtime)
@@ -17042,6 +17105,205 @@ cr.plugins_.Browser = function(runtime)
 	Exps.prototype.WindowOuterHeight = function (ret)
 	{
 		ret.set_int(window.outerHeight);
+	};
+	pluginProto.exps = new Exps();
+}());
+;
+;
+cr.plugins_.Function = function(runtime)
+{
+	this.runtime = runtime;
+};
+(function ()
+{
+	var pluginProto = cr.plugins_.Function.prototype;
+	pluginProto.Type = function(plugin)
+	{
+		this.plugin = plugin;
+		this.runtime = plugin.runtime;
+	};
+	var typeProto = pluginProto.Type.prototype;
+	typeProto.onCreate = function()
+	{
+	};
+	pluginProto.Instance = function(type)
+	{
+		this.type = type;
+		this.runtime = type.runtime;
+	};
+	var instanceProto = pluginProto.Instance.prototype;
+	var funcStack = [];
+	var funcStackPtr = -1;
+	var isInPreview = false;	// set in onCreate
+	function FuncStackEntry()
+	{
+		this.name = "";
+		this.retVal = 0;
+		this.params = [];
+	};
+	function pushFuncStack()
+	{
+		funcStackPtr++;
+		if (funcStackPtr === funcStack.length)
+			funcStack.push(new FuncStackEntry());
+		return funcStack[funcStackPtr];
+	};
+	function getCurrentFuncStack()
+	{
+		if (funcStackPtr < 0)
+			return null;
+		return funcStack[funcStackPtr];
+	};
+	function getOneAboveFuncStack()
+	{
+		if (!funcStack.length)
+			return null;
+		var i = funcStackPtr + 1;
+		if (i >= funcStack.length)
+			i = funcStack.length - 1;
+		return funcStack[i];
+	};
+	function popFuncStack()
+	{
+;
+		funcStackPtr--;
+	};
+	instanceProto.onCreate = function()
+	{
+		isInPreview = (typeof cr_is_preview !== "undefined");
+		var self = this;
+		window["c2_callFunction"] = function (name_, params_)
+		{
+			var i, len, v;
+			var fs = pushFuncStack();
+			fs.name = name_.toLowerCase();
+			fs.retVal = 0;
+			if (params_)
+			{
+				fs.params.length = params_.length;
+				for (i = 0, len = params_.length; i < len; ++i)
+				{
+					v = params_[i];
+					if (typeof v === "number" || typeof v === "string")
+						fs.params[i] = v;
+					else if (typeof v === "boolean")
+						fs.params[i] = (v ? 1 : 0);
+					else
+						fs.params[i] = 0;
+				}
+			}
+			else
+			{
+				cr.clearArray(fs.params);
+			}
+			self.runtime.trigger(cr.plugins_.Function.prototype.cnds.OnFunction, self, fs.name);
+			popFuncStack();
+			return fs.retVal;
+		};
+	};
+	function Cnds() {};
+	Cnds.prototype.OnFunction = function (name_)
+	{
+		var fs = getCurrentFuncStack();
+		if (!fs)
+			return false;
+		return cr.equals_nocase(name_, fs.name);
+	};
+	Cnds.prototype.CompareParam = function (index_, cmp_, value_)
+	{
+		var fs = getCurrentFuncStack();
+		if (!fs)
+			return false;
+		index_ = cr.floor(index_);
+		if (index_ < 0 || index_ >= fs.params.length)
+			return false;
+		return cr.do_cmp(fs.params[index_], cmp_, value_);
+	};
+	pluginProto.cnds = new Cnds();
+	function Acts() {};
+	Acts.prototype.CallFunction = function (name_, params_)
+	{
+		var fs = pushFuncStack();
+		fs.name = name_.toLowerCase();
+		fs.retVal = 0;
+		cr.shallowAssignArray(fs.params, params_);
+		var ran = this.runtime.trigger(cr.plugins_.Function.prototype.cnds.OnFunction, this, fs.name);
+		if (isInPreview && !ran)
+		{
+;
+		}
+		popFuncStack();
+	};
+	Acts.prototype.SetReturnValue = function (value_)
+	{
+		var fs = getCurrentFuncStack();
+		if (fs)
+			fs.retVal = value_;
+		else
+;
+	};
+	Acts.prototype.CallExpression = function (unused)
+	{
+	};
+	pluginProto.acts = new Acts();
+	function Exps() {};
+	Exps.prototype.ReturnValue = function (ret)
+	{
+		var fs = getOneAboveFuncStack();
+		if (fs)
+			ret.set_any(fs.retVal);
+		else
+			ret.set_int(0);
+	};
+	Exps.prototype.ParamCount = function (ret)
+	{
+		var fs = getCurrentFuncStack();
+		if (fs)
+			ret.set_int(fs.params.length);
+		else
+		{
+;
+			ret.set_int(0);
+		}
+	};
+	Exps.prototype.Param = function (ret, index_)
+	{
+		index_ = cr.floor(index_);
+		var fs = getCurrentFuncStack();
+		if (fs)
+		{
+			if (index_ >= 0 && index_ < fs.params.length)
+			{
+				ret.set_any(fs.params[index_]);
+			}
+			else
+			{
+;
+				ret.set_int(0);
+			}
+		}
+		else
+		{
+;
+			ret.set_int(0);
+		}
+	};
+	Exps.prototype.Call = function (ret, name_)
+	{
+		var fs = pushFuncStack();
+		fs.name = name_.toLowerCase();
+		fs.retVal = 0;
+		cr.clearArray(fs.params);
+		var i, len;
+		for (i = 2, len = arguments.length; i < len; i++)
+			fs.params.push(arguments[i]);
+		var ran = this.runtime.trigger(cr.plugins_.Function.prototype.cnds.OnFunction, this, fs.name);
+		if (isInPreview && !ran)
+		{
+;
+		}
+		popFuncStack();
+		ret.set_any(fs.retVal);
 	};
 	pluginProto.exps = new Exps();
 }());
@@ -21214,55 +21476,56 @@ cr.behaviors.Flash = function(runtime)
 cr.getObjectRefTable = function () { return [
 	cr.plugins_.AJAX,
 	cr.plugins_.Arr,
+	cr.plugins_.ATPShare,
 	cr.plugins_.Browser,
-	cr.plugins_.SpriteFontPlus,
-	cr.plugins_.Sprite,
+	cr.plugins_.Function,
 	cr.plugins_.Touch,
 	cr.plugins_.cranberrygame_CordovaDialog,
+	cr.plugins_.SpriteFontPlus,
+	cr.plugins_.Sprite,
 	cr.plugins_.Text,
 	cr.behaviors.Flash,
 	cr.system_object.prototype.cnds.OnLayoutStart,
 	cr.system_object.prototype.acts.Wait,
 	cr.system_object.prototype.acts.GoToLayout,
-	cr.plugins_.Touch.prototype.cnds.OnTouchObject,
-	cr.plugins_.cranberrygame_CordovaDialog.prototype.acts.Prompt,
-	cr.plugins_.cranberrygame_CordovaDialog.prototype.cnds.OnPromptOkClicked,
-	cr.plugins_.SpriteFontPlus.prototype.acts.SetText,
-	cr.plugins_.cranberrygame_CordovaDialog.prototype.exps.PromptInput,
-	cr.plugins_.SpriteFontPlus.prototype.cnds.CompareText,
-	cr.system_object.prototype.acts.SetVar,
-	cr.plugins_.SpriteFontPlus.prototype.exps.Text,
-	cr.plugins_.cranberrygame_CordovaDialog.prototype.acts.Alert,
-	cr.plugins_.Browser.prototype.acts.Close,
-	cr.behaviors.Flash.prototype.acts.Flash,
-	cr.system_object.prototype.cnds.CompareVar,
-	cr.plugins_.Sprite.prototype.acts.SetAnimFrame,
-	cr.system_object.prototype.acts.SubVar,
-	cr.system_object.prototype.acts.AddVar,
-	cr.system_object.prototype.cnds.EveryTick,
-	cr.plugins_.Sprite.prototype.acts.SetVisible,
-	cr.system_object.prototype.cnds.IsGroupActive,
-	cr.system_object.prototype.acts.SetGroupActive,
-	cr.plugins_.Arr.prototype.acts.SetXY,
-	cr.plugins_.AJAX.prototype.acts.RequestFile,
 	cr.plugins_.Arr.prototype.acts.SetSize,
-	cr.plugins_.Sprite.prototype.exps.AnimationFrameCount,
-	cr.plugins_.Arr.prototype.exps.At,
+	cr.plugins_.AJAX.prototype.acts.RequestFile,
+	cr.system_object.prototype.acts.SetVar,
 	cr.plugins_.AJAX.prototype.cnds.OnComplete,
 	cr.system_object.prototype.cnds.For,
+	cr.plugins_.Arr.prototype.acts.SetXY,
 	cr.system_object.prototype.exps.tokenat,
 	cr.plugins_.AJAX.prototype.exps.LastData,
-	cr.plugins_.Sprite.prototype.acts.SetSize,
+	cr.system_object.prototype.acts.AddVar,
+	cr.system_object.prototype.cnds.EveryTick,
+	cr.plugins_.Arr.prototype.exps.At,
+	cr.plugins_.SpriteFontPlus.prototype.acts.SetText,
 	cr.system_object.prototype.cnds.Every,
-	cr.plugins_.Sprite.prototype.acts.SetInstanceVar,
+	cr.system_object.prototype.acts.SubVar,
+	cr.system_object.prototype.cnds.CompareVar,
+	cr.system_object.prototype.cnds.IsGroupActive,
+	cr.plugins_.Touch.prototype.cnds.OnTouchObject,
 	cr.plugins_.Sprite.prototype.cnds.CompareFrame,
-	cr.plugins_.Arr.prototype.cnds.ArrForEach,
-	cr.plugins_.Arr.prototype.acts.SetX,
-	cr.plugins_.Arr.prototype.exps.CurX,
+	cr.system_object.prototype.acts.SetGroupActive,
+	cr.plugins_.Sprite.prototype.acts.SetAnimFrame,
+	cr.system_object.prototype.cnds.IsNaN,
+	cr.system_object.prototype.cnds.Compare,
+	cr.plugins_.Sprite.prototype.exps.AnimationFrameCount,
+	cr.plugins_.Touch.prototype.cnds.OnTapGestureObject,
+	cr.plugins_.cranberrygame_CordovaDialog.prototype.acts.Prompt,
+	cr.plugins_.cranberrygame_CordovaDialog.prototype.cnds.OnPromptOkClicked,
+	cr.plugins_.cranberrygame_CordovaDialog.prototype.exps.PromptInput,
+	cr.plugins_.SpriteFontPlus.prototype.cnds.CompareText,
+	cr.plugins_.SpriteFontPlus.prototype.exps.Text,
+	cr.plugins_.cranberrygame_CordovaDialog.prototype.acts.Alert,
+	cr.behaviors.Flash.prototype.acts.Flash,
+	cr.plugins_.Browser.prototype.acts.Close,
+	cr.plugins_.Sprite.prototype.acts.SetVisible,
 	cr.plugins_.Text.prototype.acts.Destroy,
 	cr.system_object.prototype.acts.CreateObject,
 	cr.plugins_.Text.prototype.acts.SetInstanceVar,
 	cr.system_object.prototype.cnds.ForEach,
 	cr.plugins_.Text.prototype.acts.SetText,
-	cr.system_object.prototype.exps.floor
+	cr.plugins_.ATPShare.prototype.acts.Share,
+	cr.system_object.prototype.acts.NextPrevLayout
 ];};
