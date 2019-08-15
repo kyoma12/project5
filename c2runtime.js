@@ -21356,6 +21356,505 @@ cr.plugins_.cranberrygame_CordovaDialog = function(runtime)
 }());
 ;
 ;
+/*
+cr.plugins_.cranberrygame_ShareApp = function(runtime)
+{
+	this.runtime = runtime;
+	Type
+		onCreate
+	Instance
+		onCreate
+		draw
+		drawGL
+	cnds
+	acts
+	exps
+};
+*/
+cr.plugins_.cranberrygame_ShareApp = function(runtime)
+{
+	this.runtime = runtime;
+};
+(function ()
+{
+	var pluginProto = cr.plugins_.cranberrygame_ShareApp.prototype;
+	pluginProto.Type = function(plugin)
+	{
+		this.plugin = plugin;
+		this.runtime = plugin.runtime;
+	};
+	var typeProto = pluginProto.Type.prototype;
+/*
+	var fbAppID = "";
+	var fbAppSecret = "";
+*/
+	var shareAppUrl = '';
+	typeProto.onCreate = function()
+	{
+/*
+		var newScriptTag=document.createElement('script');
+		newScriptTag.setAttribute("type","text/javascript");
+		newScriptTag.setAttribute("src", "mylib.js");
+		document.getElementsByTagName("head")[0].appendChild(newScriptTag);
+		var scripts=document.getElementsByTagName("script");
+		var scriptExist=false;
+		for(var i=0;i<scripts.length;i++){
+			if(scripts[i].src.indexOf("cordova.js")!=-1||scripts[i].src.indexOf("phonegap.js")!=-1){
+				scriptExist=true;
+				break;
+			}
+		}
+		if(!scriptExist){
+			var newScriptTag=document.createElement("script");
+			newScriptTag.setAttribute("type","text/javascript");
+			newScriptTag.setAttribute("src", "cordova.js");
+			document.getElementsByTagName("head")[0].appendChild(newScriptTag);
+		}
+*/
+		if(this.runtime.isBlackberry10 || this.runtime.isWindows8App || this.runtime.isWindowsPhone8 || this.runtime.isWindowsPhone81){
+			var scripts=document.getElementsByTagName("script");
+			var scriptExist=false;
+			for(var i=0;i<scripts.length;i++){
+				if(scripts[i].src.indexOf("cordova.js")!=-1||scripts[i].src.indexOf("phonegap.js")!=-1){
+					scriptExist=true;
+					break;
+				}
+			}
+			if(!scriptExist){
+				var newScriptTag=document.createElement("script");
+				newScriptTag.setAttribute("type","text/javascript");
+				newScriptTag.setAttribute("src", "cordova.js");
+				document.getElementsByTagName("head")[0].appendChild(newScriptTag);
+			}
+		}
+	};
+	pluginProto.Instance = function(type)
+	{
+		this.type = type;
+		this.runtime = type.runtime;
+	};
+	var instanceProto = pluginProto.Instance.prototype;
+	instanceProto.onCreate = function()
+	{
+/*
+		var self=this;
+		window.addEventListener("resize", function () {//cranberrygame
+			self.runtime.trigger(cr.plugins_.cranberrygame_ShareApp.prototype.cnds.TriggerCondition, self);
+		});
+*/
+		shareAppUrl = '';
+		if (this.runtime.isAndroid) {
+			shareAppUrl = this.properties[1];
+		}
+		else if (this.runtime.isBlackberry10) {
+			shareAppUrl = this.properties[2];
+		}
+		else if (this.runtime.isiOS) {
+			shareAppUrl = this.properties[3];
+		}
+		else if (this.runtime.isWindows8App) {
+			shareAppUrl = this.properties[4];
+		}
+		else if (this.runtime.isWindowsPhone8 || this.runtime.isWindowsPhone81) {
+			shareAppUrl = this.properties[5];
+		}
+		else {
+			shareAppUrl = this.properties[0];
+		}
+	};
+	instanceProto.draw = function(ctx)
+	{
+	};
+	instanceProto.drawGL = function (glw)
+	{
+	};
+/*
+	instanceProto.at = function (x)
+	{
+		return this.arr[x];
+	};
+	instanceProto.set = function (x, val)
+	{
+		this.arr[x] = val;
+	};
+*/
+	function Cnds() {};
+/*
+	Cnds.prototype.MyCondition = function (myparam)
+	{
+		return myparam >= 0;
+	};
+	Cnds.prototype.TriggerCondition = function ()
+	{
+		return true;
+	};
+*/
+	Cnds.prototype.OnShareAppSucceeded = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnShareAppFailed = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnShareAppViaFacebookSucceeded = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnShareAppViaFacebookFailed = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnShareAppViaTwitterSucceeded = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnShareAppViaTwitterFailed = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnShareAppViaWhatsappSucceeded = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnShareAppViaWhatsappFailed = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnShareAppViaSMSSucceeded = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnShareAppViaSMSFailed = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnShareAppViaEmailSucceeded = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnShareAppViaEmailFailed = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnShareAppViaGooglePlusSucceeded = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnShareAppViaGooglePlusFailed = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnShareAppViaLineSucceeded = function ()
+	{
+		return true;
+	};
+	Cnds.prototype.OnShareAppViaLineFailed = function ()
+	{
+		return true;
+	};
+	pluginProto.cnds = new Cnds();
+	function Acts() {};
+/*
+	Acts.prototype.MyAction = function (myparam)
+	{
+		alert(myparam);
+	};
+	Acts.prototype.TriggerAction = function ()
+	{
+		var self = this;
+		self.runtime.trigger(cr.plugins_.cranberrygame_ShareApp.prototype.cnds.TriggerCondition, self);
+	};
+*/
+	Acts.prototype.ShareApp = function (title, message)
+	{
+		if ((this.runtime.isAndroid || this.runtime.isiOS || this.runtime.isWindowsPhone8 || this.runtime.isWindowsPhone81) && !this.runtime.isAmazonWebApp) {
+			if (typeof window["plugins"] == 'undefined' || typeof window["plugins"]["socialsharing"] == 'undefined')
+				return;
+			var tempMessage = message;
+			if(tempMessage == '')
+				tempMessage = null;
+			var tempTitle = title;
+			if(tempTitle == '')
+				tempTitle = null;
+			var tempFile = null;
+			var tempShareAppUrl = shareAppUrl;
+			if(tempShareAppUrl == '')
+				tempShareAppUrl = null;
+			var self = this;
+			window["plugins"]["socialsharing"]["share"](tempMessage, tempTitle, tempFile, tempShareAppUrl,
+			function(result){
+				console.log(result);
+				self.runtime.trigger(cr.plugins_.cranberrygame_ShareApp.prototype.cnds.OnShareAppSucceeded, self);
+			},
+			function(error){
+				console.log(error);
+				self.runtime.trigger(cr.plugins_.cranberrygame_ShareApp.prototype.cnds.OnShareAppFailed, self);
+			});
+		}
+		else {
+		}
+	};
+	Acts.prototype.ShareAppViaFacebook = function (message)
+	{
+		if ((this.runtime.isiOS && typeof Ejecta != 'undefined')) {
+			var link = 'http://www.facebook.com/sharer.php?u=' + encodeURIComponent(shareAppUrl) + '&t=' + encodeURIComponent(message);
+			ejecta['openURL'](link);
+		}
+		else if ((this.runtime.isAndroid || this.runtime.isiOS || this.runtime.isWindowsPhone8 || this.runtime.isWindowsPhone81) && !this.runtime.isAmazonWebApp) {
+			if (typeof window["plugins"] == 'undefined' || typeof window["plugins"]["socialsharing"] == 'undefined')
+				return;
+			var tempMessage = message;
+			if(tempMessage == '')
+				tempMessage = null;
+			var tempFile = null;
+			var tempShareAppUrl = shareAppUrl;
+			if(tempShareAppUrl == '')
+				tempShareAppUrl = null;
+			var self = this;
+			window["plugins"]["socialsharing"]["shareViaFacebook"](tempMessage, tempFile, tempShareAppUrl,
+			function(result){
+				console.log(result);
+				self.runtime.trigger(cr.plugins_.cranberrygame_ShareApp.prototype.cnds.OnShareAppViaFacebookSucceeded, self);
+			},
+			function(error){
+				console.log(error);
+				self.runtime.trigger(cr.plugins_.cranberrygame_ShareApp.prototype.cnds.OnShareAppViaFacebookFailed, self);
+				var link = 'http://www.facebook.com/sharer.php?u=' + encodeURIComponent(shareAppUrl) + '&t=' + encodeURIComponent(message);
+				window.open(link, "_blank");
+			});
+		}
+		else if((this.runtime.isBlackberry10 || this.runtime.isWindows8App)){
+			var link = 'http://www.facebook.com/sharer.php?u=' + encodeURIComponent(shareAppUrl) + '&t=' + encodeURIComponent(message);
+			window.open(link, "_system");
+		}
+		else {
+			var link = 'http://www.facebook.com/sharer.php?u=' + encodeURIComponent(shareAppUrl) + '&t=' + encodeURIComponent(message);
+			window.open(link, "_blank");
+		}
+	};
+	Acts.prototype.ShareAppViaTwitter = function (message)
+	{
+		if ((this.runtime.isiOS && typeof Ejecta != 'undefined')) {
+			var link = 'http://twitter.com/home/?status=' + encodeURIComponent(message + ' ' + shareAppUrl);
+			ejecta['openURL'](link);
+		}
+		else if ((this.runtime.isAndroid || this.runtime.isiOS || this.runtime.isWindowsPhone8 || this.runtime.isWindowsPhone81) && !this.runtime.isAmazonWebApp) {
+			if (typeof window["plugins"] == 'undefined' || typeof window["plugins"]["socialsharing"] == 'undefined')
+				return;
+			var tempMessage = message;
+			if(tempMessage == '')
+				tempMessage = null;
+			var tempFile = null;
+			var tempShareAppUrl = shareAppUrl;
+			if(tempShareAppUrl == '')
+				tempShareAppUrl = null;
+			if (this.runtime.isAndroid) {
+				var self = this;
+				window["plugins"]["socialsharing"]["shareViaTwitter"](tempMessage, tempFile, tempShareAppUrl,
+				function(result){
+					console.log(result);
+					self.runtime.trigger(cr.plugins_.cranberrygame_ShareApp.prototype.cnds.OnShareAppViaTwitterSucceeded, self);
+				},
+				function(error){
+					console.log(error);
+					self.runtime.trigger(cr.plugins_.cranberrygame_ShareApp.prototype.cnds.OnShareAppViaTwitterFailed, self);
+					var link = 'https://mobile.twitter.com/compose/tweet?status=' + encodeURIComponent(message + ' ' + shareAppUrl);
+					window.open(link, "_system");
+				});
+			}
+			else {
+				var self = this;
+				window["plugins"]["socialsharing"]["shareViaTwitter"](tempMessage, tempFile, tempShareAppUrl,
+				function(result){
+					console.log(result);
+					self.runtime.trigger(cr.plugins_.cranberrygame_ShareApp.prototype.cnds.OnShareAppViaTwitterSucceeded, self);
+				},
+				function(error){
+					console.log(error);
+					self.runtime.trigger(cr.plugins_.cranberrygame_ShareApp.prototype.cnds.OnShareAppViaTwitterFailed, self);
+					var link = 'https://mobile.twitter.com/compose/tweet?status=' + encodeURIComponent(message + ' ' + shareAppUrl);
+					window.open(link, "_blank");
+				});
+			}
+		}
+/*
+		if ((this.runtime.isBlackberry10))
+		{
+			var link = 'http://twitter.com/home/?status=' + encodeURIComponent(message + ' ' + shareAppUrl);
+			blackberry["invoke"]["invoke"]({
+				'target': "sys.browser",
+				'uri': link
+			}, function(result){}, function(error){});
+		}
+*/
+		else if((this.runtime.isBlackberry10 || this.runtime.isWindows8App)){
+			var link = 'http://twitter.com/home/?status=' + encodeURIComponent(message + ' ' + shareAppUrl);
+			window.open(link, "_system");
+		}
+		else {
+			var link = 'http://twitter.com/home/?status=' + encodeURIComponent(message + ' ' + shareAppUrl);
+			window.open(link, "_blank");
+		}
+	};
+	Acts.prototype.ShareAppViaWhatsapp = function (message)
+	{
+		if ((this.runtime.isAndroid || this.runtime.isiOS || this.runtime.isWindowsPhone8 || this.runtime.isWindowsPhone81) && !this.runtime.isAmazonWebApp) {
+			if (typeof window["plugins"] == 'undefined' || typeof window["plugins"]["socialsharing"] == 'undefined')
+				return;
+			var tempMessage = message;
+			if(tempMessage == '')
+				tempMessage = null;
+			var tempFile = null;
+			var tempShareAppUrl = shareAppUrl;
+			if(tempShareAppUrl == '')
+				tempShareAppUrl = null;
+			var self = this;
+			window["plugins"]["socialsharing"]["shareViaWhatsApp"](tempMessage, tempFile, tempShareAppUrl,
+			function(result){
+				console.log(result);
+				self.runtime.trigger(cr.plugins_.cranberrygame_ShareApp.prototype.cnds.OnShareAppViaWhatsappSucceeded, self);
+			},
+			function(error){
+				console.log(error);
+				self.runtime.trigger(cr.plugins_.cranberrygame_ShareApp.prototype.cnds.OnShareAppViaWhatsappFailed, self);
+			});
+		}
+		else {
+		}
+	};
+	Acts.prototype.ShareAppViaSMS = function (message)
+	{
+		if ((this.runtime.isAndroid || this.runtime.isiOS || this.runtime.isWindowsPhone8 || this.runtime.isWindowsPhone81) && !this.runtime.isAmazonWebApp) {
+			if (typeof window["plugins"] == 'undefined' || typeof window["plugins"]["socialsharing"] == 'undefined')
+				return;
+			var tempMessage = message + ' ' + shareAppUrl;
+			if(tempMessage == '')
+				tempMessage = null;
+			var self = this;
+			window["plugins"]["socialsharing"]["shareViaSMS"](tempMessage, null,
+			function(result){
+				console.log(result);
+				self.runtime.trigger(cr.plugins_.cranberrygame_ShareApp.prototype.cnds.OnShareAppViaSMSSucceeded, self);
+			},
+			function(error){
+				console.log(error);
+				self.runtime.trigger(cr.plugins_.cranberrygame_ShareApp.prototype.cnds.OnShareAppViaSMSFailed, self);
+			});
+		}
+		else {
+		}
+	};
+	Acts.prototype.ShareAppViaEmail = function (title, message)
+	{
+		if ((this.runtime.isAndroid || this.runtime.isiOS || this.runtime.isWindowsPhone8 || this.runtime.isWindowsPhone81) && !this.runtime.isAmazonWebApp) {
+			if (typeof window["plugins"] == 'undefined' || typeof window["plugins"]["socialsharing"] == 'undefined')
+				return;
+			var tempMessage = message + ' ' + shareAppUrl;
+			if(tempMessage == '')
+				tempMessage = null;
+			var tempTitle = title;
+			if(tempTitle == '')
+				tempTitle = null;
+			var tempFiles = null;
+			var self = this;
+			window["plugins"]["socialsharing"]["shareViaEmail"](tempMessage, tempTitle, null, null, null, tempFiles,
+			function(result){
+				console.log(result);
+				self.runtime.trigger(cr.plugins_.cranberrygame_ShareApp.prototype.cnds.OnShareAppViaEmailSucceeded, self);
+			},
+			function(error){
+				console.log(error);
+				self.runtime.trigger(cr.plugins_.cranberrygame_ShareApp.prototype.cnds.OnShareAppViaEmailFailed, self);
+			});
+		}
+		else {
+		}
+	};
+	Acts.prototype.ShareAppViaGooglePlus = function (message)
+	{
+		if ((this.runtime.isiOS && typeof Ejecta != 'undefined')) {
+			var link = 'https://plus.google.com/share?url=' + encodeURIComponent(link);
+			ejecta['openURL'](link);
+		}
+		else if ((this.runtime.isAndroid) && !this.runtime.isAmazonWebApp) {
+			if (typeof window["plugins"] == 'undefined' || typeof window["plugins"]["socialsharing"] == 'undefined')
+				return;
+			var tempMessage = message;
+			if(tempMessage == '')
+				tempMessage = null;
+			var tempTitle = null;
+			var tempFile = null;
+			var tempShareAppUrl = shareAppUrl;
+			if(tempShareAppUrl == '')
+				tempShareAppUrl = null;
+			var self = this;
+			window["plugins"]["socialsharing"]["shareVia"]('com.google.android.apps.plus', tempMessage, tempTitle, tempFile, tempShareAppUrl,
+			function(result){
+				console.log(result);
+				self.runtime.trigger(cr.plugins_.cranberrygame_ShareApp.prototype.cnds.OnShareAppViaGooglePlusSucceeded, self);
+			},
+			function(error){
+				console.log(error);
+				self.runtime.trigger(cr.plugins_.cranberrygame_ShareApp.prototype.cnds.OnShareAppViaGooglePlusFailed, self);
+				var link = 'https://plus.google.com/share?url=' + encodeURIComponent(shareAppUrl);
+				window.open(link, "_blank");
+			});
+		}
+		else if((this.runtime.isBlackberry10 || this.runtime.isWindows8App)){
+			var link = 'https://plus.google.com/share?url=' + encodeURIComponent(shareAppUrl);
+			window.open(link, "_system");
+		}
+		else {
+			var link = 'https://plus.google.com/share?url=' + encodeURIComponent(shareAppUrl);
+			window.open(link, "_blank");
+		}
+	};
+	Acts.prototype.ShareAppViaLine = function (message)
+	{
+		if ((this.runtime.isAndroid || this.runtime.isiOS || this.runtime.isWindowsPhone8 || this.runtime.isWindowsPhone81) && !this.runtime.isAmazonWebApp) {
+			if (typeof window["plugins"] == 'undefined' || typeof window["plugins"]["socialsharing"] == 'undefined')
+				return;
+			var tempMessage = message;
+			if(tempMessage == '')
+				tempMessage = null;
+			var tempTitle = null;
+			var tempFile = null;
+			var tempShareAppUrl = shareAppUrl;
+			if(tempShareAppUrl == '')
+				tempShareAppUrl = null;
+			if (this.runtime.isAndroid) {
+				var self = this;
+				window["plugins"]["socialsharing"]["shareVia"]('jp.naver.line.android', tempMessage, tempTitle, tempFile, tempShareAppUrl,
+				function(result){
+					console.log(result);
+					self.runtime.trigger(cr.plugins_.cranberrygame_ShareApp.prototype.cnds.OnShareAppViaLineSucceeded, self);
+				},
+				function(error){
+					console.log(error);
+					self.runtime.trigger(cr.plugins_.cranberrygame_ShareApp.prototype.cnds.OnShareAppViaLineFailed, self);
+				});
+			}
+		}
+		else {
+		}
+	};
+	pluginProto.acts = new Acts();
+	function Exps() {};
+/*
+	Exps.prototype.MyExpression = function (ret)	// 'ret' must always be the first parameter - always return the expression's result through it!
+	{
+		ret.set_int(1337);				// return our value
+	};
+	Exps.prototype.Text = function (ret, param) //cranberrygame
+	{
+		ret.set_string("Hello");		// for ef_return_string
+	};
+*/
+	pluginProto.exps = new Exps();
+}());
+;
+;
 cr.behaviors.Flash = function(runtime)
 {
 	this.runtime = runtime;
@@ -21479,11 +21978,12 @@ cr.getObjectRefTable = function () { return [
 	cr.plugins_.ATPShare,
 	cr.plugins_.Browser,
 	cr.plugins_.Function,
-	cr.plugins_.Touch,
 	cr.plugins_.cranberrygame_CordovaDialog,
-	cr.plugins_.SpriteFontPlus,
-	cr.plugins_.Sprite,
+	cr.plugins_.cranberrygame_ShareApp,
 	cr.plugins_.Text,
+	cr.plugins_.Sprite,
+	cr.plugins_.Touch,
+	cr.plugins_.SpriteFontPlus,
 	cr.behaviors.Flash,
 	cr.system_object.prototype.cnds.OnLayoutStart,
 	cr.system_object.prototype.acts.Wait,
@@ -21526,6 +22026,6 @@ cr.getObjectRefTable = function () { return [
 	cr.plugins_.Text.prototype.acts.SetInstanceVar,
 	cr.system_object.prototype.cnds.ForEach,
 	cr.plugins_.Text.prototype.acts.SetText,
-	cr.plugins_.ATPShare.prototype.acts.Share,
+	cr.plugins_.cranberrygame_ShareApp.prototype.acts.ShareApp,
 	cr.system_object.prototype.acts.NextPrevLayout
 ];};

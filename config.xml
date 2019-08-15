@@ -29,7 +29,7 @@
 	<plugin name="cordova-plugin-statusbar" />
 	<plugin name="cordova-plugin-whitelist" />
 	<plugin name="cordova-plugin-wkwebview-engine" />
-	<plugin name="https://github.com/markmarijnissen/cordova-plugin-share" />
+	<plugin name="https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin#5.0.10" />
 
 
 	<engine name="ios" />
