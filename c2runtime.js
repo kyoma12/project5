@@ -22021,11 +22021,12 @@ cr.getObjectRefTable = function () { return [
 	cr.behaviors.Flash.prototype.acts.Flash,
 	cr.plugins_.Browser.prototype.acts.Close,
 	cr.plugins_.Sprite.prototype.acts.SetVisible,
+	cr.system_object.prototype.exps.round,
 	cr.plugins_.Text.prototype.acts.Destroy,
 	cr.system_object.prototype.acts.CreateObject,
 	cr.plugins_.Text.prototype.acts.SetInstanceVar,
 	cr.system_object.prototype.cnds.ForEach,
 	cr.plugins_.Text.prototype.acts.SetText,
-	cr.plugins_.cranberrygame_ShareApp.prototype.acts.ShareApp,
+	cr.plugins_.cranberrygame_ShareApp.prototype.acts.ShareAppViaFacebook,
 	cr.system_object.prototype.acts.NextPrevLayout
 ];};
