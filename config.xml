@@ -29,7 +29,7 @@
 	<plugin name="cordova-plugin-statusbar" />
 	<plugin name="cordova-plugin-whitelist" />
 	<plugin name="cordova-plugin-wkwebview-engine" />
-	<plugin name="https://github.com/CocoonIO/cocoon-plugin-nativeshare.git" />
+	<plugin name="https://github.com/markmarijnissen/cordova-plugin-share" />
 
 
 	<engine name="ios" />
